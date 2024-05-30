@@ -13,18 +13,29 @@ let canvasAspectRatio = 0;
 let horizontalLines = [];
 let verticalLines = [];
 
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(255, 250, 240); //Floralwhite
   calculateMondrian();
-  noLoop(); //make the draw function only run once
+  // frameRate() controls how often draw() is called, making the screen refresh more slowly
+  frameRate(3); // Set the frame rate to 3 frames per second
 }
+
+
 
 function draw() {
   drawGrid();
   drawLine(); // draw line first
   drawRectangle();
+  if (frameCount % 120 == 0) { 
+    // Randomly change the width of the yellow line, between 2 and 8
+    yellowLineWidth = floor(random(2, 8)); 
+    redraw(); // Redraw the canvas to reflect the changes
+  }
 }
+
+
 
 function drawGrid(){
   //rectangle layout
@@ -258,6 +269,7 @@ function drawLine(){
     let firstX=floor(random(0,2))*rectSize;
   //Draw Horizontal lines
   for (let i = 0; i < random(10,12); i ++){
+   
     let y=firstY+floor(random(i,i*2))*rectSize+rectSize;
 
     //Limit the maximum value
@@ -269,7 +281,6 @@ function drawLine(){
     fill(238,216,34);
     noStroke();
     rect(mondrian.xOffset, y + mondrian.yOffset, mondrian.width, h);
-    
     //store the y and h values in the array, so the cross points can be 
     //drawn later
     horizontalLines.push({y: y, h: h, x: 0, w: mondrian.width});
@@ -301,10 +312,10 @@ function drawLine(){
     fill(238,216,34);
     noStroke();
     rect(x + mondrian.xOffset, mondrian.yOffset, w, mondrian.height);
-    
+
     //store the x and w values in the array
     verticalLines.push({x: x, w: w, y: 0, h: mondrian.height});
-  
+
     //Add random colored squares along the vertical line
     for (let i = rectSize; i < mondrian.height; i += rectSize){
       if(random() > 0.5){
@@ -328,7 +339,6 @@ function drawLine(){
         let randomColor = random([color(173,57,42),   //red
                                   color(67,103,187),    //blue
                                   color(200, 200, 200)]);  //grey
-      
         fill(randomColor);
         square(vertical.x + mondrian.xOffset, 
                horizontal.y + mondrian.yOffset, rectSize/2);
@@ -344,6 +354,7 @@ function windowResized(){
   calculateMondrian(); 
   draw();
 }
+
 function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
   background(255, 250, 240);
@@ -354,7 +365,7 @@ function windowResized(){
 function calculateMondrian(){
   canvasAspectRatio = width/height;
   mondrian.aspect = 1; //Square aspect ratio
-  
+
   if(1 > canvasAspectRatio){
     mondrian.width = width;
     mondrian.height = width / mondrian.aspect;
