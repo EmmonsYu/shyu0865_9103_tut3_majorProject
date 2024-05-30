@@ -13,26 +13,39 @@ let canvasAspectRatio = 0;
 let horizontalLines = [];
 let verticalLines = [];
 
+let easingTime = 40; // Duration of the easing effect
+let startFrame; // Frame number when easing starts
+let targetFrameRate; // Target frame rate when easing ends
+let initialFrameRate = 10; // Initial frame rate
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  background(255, 250, 240); //Floralwhite
   calculateMondrian();
-  // frameRate() controls how often draw() is called, making the screen refresh more slowly
-  frameRate(3); // Set the frame rate to 3 frames per second
+  frameRate(initialFrameRate); // Set the initial frame rate
+  startFrame = frameCount; // Record the frame number when easing starts
+  targetFrameRate = initialFrameRate; // Set the initial target frame rate
 }
 
 
 
 function draw() {
   drawGrid();
-  drawLine(); // draw line first
+  drawLine();
   drawRectangle();
-  if (frameCount % 120 == 0) { 
-    // Randomly change the width of the yellow line, between 2 and 8
-    yellowLineWidth = floor(random(2, 8)); 
-    redraw(); // Redraw the canvas to reflect the changes
+
+  // If the frame count reaches the easing time
+  if (frameCount - startFrame >= easingTime) {
+    // Reset the frame number when easing starts
+    startFrame = frameCount;
+    // Set a new target frame rate
+    targetFrameRate = floor(random(1, 80)); // Random frame rate
   }
+
+  // Calculate the easing progress
+  let t = (frameCount - startFrame) / easingTime;
+  // Calculate the current frame rate
+  let currentFrameRate = initialFrameRate + (targetFrameRate - initialFrameRate) * t;
+  frameRate(currentFrameRate); // Set the current frame rate
 }
 
 
