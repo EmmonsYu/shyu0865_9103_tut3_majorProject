@@ -291,7 +291,7 @@ function drawLine(){
   //Draw Horizontal lines
   for (let i = 0; i < horizontalYellowLines; i ++){
    
-    let y=firstY+floor(random(i,i*4))*rectSize+rectSize;
+    let y=firstY+floor(random(i,i*5))*rectSize+rectSize;
 
     //Limit the maximum value
     if(y>mondrian.height){
@@ -323,7 +323,7 @@ function drawLine(){
 
   //Draw Vertical lines
   for (let i = 0; i < verticalYellowLines; i ++){
-    let x = firstX + floor(random(i,i*4)) * rectSize + rectSize;
+    let x = firstX + floor(random(i,i*5)) * rectSize + rectSize;
     if (x<mondrian.width) { // Add boundary check
 
       let w =  rectSize/2;
