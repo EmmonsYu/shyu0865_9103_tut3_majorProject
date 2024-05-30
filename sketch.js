@@ -18,6 +18,9 @@ let startFrame; // Frame number when easing starts
 let targetFrameRate; // Target frame rate when easing ends
 let initialFrameRate = 10; // Initial frame rate
 
+let horizontalYellowLines = 10; // Initial number of horizontal yellow lines
+let verticalYellowLines = 10; // Initial number of vertical yellow lines
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   calculateMondrian();
@@ -46,6 +49,11 @@ function draw() {
   // Calculate the current frame rate
   let currentFrameRate = initialFrameRate + (targetFrameRate - initialFrameRate) * t;
   frameRate(currentFrameRate); // Set the current frame rate
+
+  // Control the number of horizontal yellow lines based on the value of mouseY
+  horizontalYellowLines = floor(map(mouseY, 0, height, 5, 20));
+  // Control the number of vertical yellow lines based on the value of mouseY
+  verticalYellowLines = floor(map(mouseY, 0, height, 5, 20));
 }
 
 
@@ -281,7 +289,7 @@ function drawLine(){
     let firstY=floor(random(0,2))*rectSize;
     let firstX=floor(random(0,2))*rectSize;
   //Draw Horizontal lines
-  for (let i = 0; i < random(10,12); i ++){
+  for (let i = 0; i < horizontalYellowLines; i ++){
    
     let y=firstY+floor(random(i,i*2))*rectSize+rectSize;
 
@@ -314,7 +322,7 @@ function drawLine(){
   }
 
   //Draw Vertical lines
-  for (let i = 0; i < random(10,12); i ++){
+  for (let i = 0; i < verticalYellowLines; i ++){
     let x = firstX+floor(random(i,i*2))*rectSize+rectSize;
     if(x>mondrian.width){
       x=mondrian.width
