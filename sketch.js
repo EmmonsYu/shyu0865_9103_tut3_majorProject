@@ -291,7 +291,7 @@ function drawLine(){
   //Draw Horizontal lines
   for (let i = 0; i < horizontalYellowLines; i ++){
    
-    let y=firstY+floor(random(i,i*2))*rectSize+rectSize;
+    let y=firstY+floor(random(i,i*4))*rectSize+rectSize;
 
     //Limit the maximum value
     if(y>mondrian.height){
@@ -323,30 +323,29 @@ function drawLine(){
 
   //Draw Vertical lines
   for (let i = 0; i < verticalYellowLines; i ++){
-    let x = firstX+floor(random(i,i*2))*rectSize+rectSize;
-    if(x>mondrian.width){
-      x=mondrian.width
-    }
+    let x = firstX + floor(random(i,i*4)) * rectSize + rectSize;
+    if (x<mondrian.width) { // Add boundary check
 
-    let w =  rectSize/2;
+      let w =  rectSize/2;
 
-    fill(238,216,34);
-    noStroke();
-    rect(x + mondrian.xOffset, mondrian.yOffset, w, mondrian.height);
+      fill(238,216,34);
+      noStroke();
+      rect(x + mondrian.xOffset, mondrian.yOffset, w, mondrian.height);
 
-    //store the x and w values in the array
-    verticalLines.push({x: x, w: w, y: 0, h: mondrian.height});
+      //store the x and w values in the array
+      verticalLines.push({x: x, w: w, y: 0, h: mondrian.height});
 
-    //Add random colored squares along the vertical line
-    for (let i = rectSize; i < mondrian.height; i += rectSize){
-      if(random() > 0.5){
-        let randomColor = random([color(238,216,34), //yellow
-                                  color(173,57,42), //red
-                                  color(67,103,187), //blue
-                                  color(200, 200, 200)]); //grey
-        fill(randomColor);
-        noStroke();
-        square(x + mondrian.xOffset, i + mondrian.yOffset, rectSize/2);
+      //Add random colored squares along the vertical line
+      for (let i = rectSize; i < mondrian.height; i += rectSize){
+        if(random() > 0.5){
+          let randomColor = random([color(238,216,34), //yellow
+                                    color(173,57,42), //red
+                                    color(67,103,187), //blue
+                                    color(200, 200, 200)]); //grey
+          fill(randomColor);
+          noStroke();
+          square(x + mondrian.xOffset, i + mondrian.yOffset, rectSize/2);
+        }
       }
     }
   }
