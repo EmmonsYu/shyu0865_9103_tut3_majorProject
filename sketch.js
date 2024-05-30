@@ -51,9 +51,9 @@ function draw() {
   frameRate(currentFrameRate); // Set the current frame rate
 
   // Control the number of horizontal yellow lines based on the value of mouseY
-  horizontalYellowLines = floor(map(mouseY, 0, height, 5, 20));
+  horizontalYellowLines = floor(map(mouseY, 0, height, 4, 10));
   // Control the number of vertical yellow lines based on the value of mouseY
-  verticalYellowLines = floor(map(mouseY, 0, height, 5, 20));
+  verticalYellowLines = floor(map(mouseY, 0, height, 4, 10));
 }
 
 
@@ -288,10 +288,12 @@ function drawLine(){
 //The starting point coordinates of Y, this is the position of the first horizontal line, and the subsequent vertical lines are arranged based on this.
     let firstY=floor(random(0,2))*rectSize;
     let firstX=floor(random(0,2))*rectSize;
-  //Draw Horizontal lines
-  for (let i = 0; i < horizontalYellowLines; i ++){
-   
-    let y=firstY+floor(random(i,i*5))*rectSize+rectSize;
+  // Draw Horizontal lines
+  for (let i = 0; i < horizontalYellowLines; i++) {
+    // Divide the canvas into equal parts based on horizontalYellowLines,
+    // and randomly generate yellow lines within each section
+    let regionHeight = (mondrian.height - firstY) / horizontalYellowLines;
+    let y = firstY + i * regionHeight + floor(random(regionHeight / rectSize)) * rectSize;
 
     //Limit the maximum value
     if(y>mondrian.height){
@@ -302,13 +304,14 @@ function drawLine(){
     fill(238,216,34);
     noStroke();
     rect(mondrian.xOffset, y + mondrian.yOffset, mondrian.width, h);
+
     //store the y and h values in the array, so the cross points can be 
     //drawn later
     horizontalLines.push({y: y, h: h, x: 0, w: mondrian.width});
 
     //Add random colored squares along the horizontal line to mimic 
     //Mondrian painting
-    for (let i = rectSize; i < mondrian.width; i += rectSize){
+    for (let i = 0; i < verticalYellowLines; i ++){
       if(random() > 0.5){ //Randomly decide to place a colored square
         let randomColor = random([color(238,216,34), //yellow
                                   color(173,57,42), //red
@@ -316,14 +319,18 @@ function drawLine(){
                                   color(200, 200, 200)]); //grey
         fill(randomColor);
         noStroke();
-        square(i + mondrian.xOffset, y + mondrian.yOffset, rectSize/2);
+        square(i * rectSize + mondrian.xOffset, y + mondrian.yOffset, rectSize/2);
       }
     }
   }
 
   //Draw Vertical lines
   for (let i = 0; i < verticalYellowLines; i ++){
-    let x = firstX + floor(random(i,i*5)) * rectSize + rectSize;
+    // Divide the canvas into equal parts based on verticalYellowLines,
+    // and randomly generate yellow lines within each section
+    let regionWidth = (mondrian.width - firstX) / verticalYellowLines;
+    let x = firstX + i * regionWidth + floor(random(regionWidth / rectSize)) * rectSize;
+
     if (x<mondrian.width) { // Add boundary check
 
       let w =  rectSize/2;
