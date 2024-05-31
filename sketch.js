@@ -1,13 +1,42 @@
+// Define the Mondrian class
+class Mondrian {
+  constructor() {
+    this.aspect = 0;
+    this.width = 600;
+    this.height = 600;
+    this.xOffset = 0;
+    this.yOffset = 0;
+  }
+
+  // Method to calculate Mondrian properties based on canvas size
+  calculateMondrian(canvasWidth, canvasHeight) {
+    this.aspect = 1; // Square aspect ratio
+
+    if (canvasWidth < canvasHeight) {
+      this.width = canvasWidth;
+      this.height = canvasWidth / this.aspect;
+      this.yOffset = (canvasHeight - this.height) / 2;
+      this.xOffset = 0;
+    } else if (canvasWidth > canvasHeight) {
+      this.width = canvasHeight * this.aspect;
+      this.height = canvasHeight;
+      this.xOffset = (canvasWidth - this.width) / 2;
+      this.yOffset = 0;
+    } else {
+      this.width = canvasWidth;
+      this.height = canvasHeight;
+      this.xOffset = 0;
+      this.yOffset = 0;
+    }
+  }
+}
+
+// Create an instance of the Mondrian class
+let mondrian;
+
 //This is a preliminary sketch for the group task, made by Yusong Xie
 //Set properties for the Mondrian painting
 let rectSize = 50;
-
-//Make an object to hold the properties of the Mondrian design
-let mondrian = {aspect: 0, width: 600, height: 600, xOffset: 0, yOffset: 0};
-//Set width equal to height, because I want to make a square design
-
-//A variable for the canvas aspect ratio
-let canvasAspectRatio = 0;
 
 //Make two arrays to store the horizontal and vertical lines
 let horizontalLines = [];
@@ -23,15 +52,16 @@ let verticalYellowLines = 10; // Initial number of vertical yellow lines
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  calculateMondrian();
+  mondrian = new Mondrian(); // Initialize the Mondrian object
+  mondrian.calculateMondrian(windowWidth, windowHeight); // Calculate Mondrian properties
   frameRate(initialFrameRate); // Set the initial frame rate
   startFrame = frameCount; // Record the frame number when easing starts
   targetFrameRate = initialFrameRate; // Set the initial target frame rate
 }
 
-
-
 function draw() {
+  background(255, 250, 240); // Clear background
+  mondrian.calculateMondrian(windowWidth, windowHeight); // Recalculate Mondrian properties
   drawGrid();
   drawLine();
   drawRectangle();
@@ -50,13 +80,14 @@ function draw() {
   let currentFrameRate = initialFrameRate + (targetFrameRate - initialFrameRate) * t;
   frameRate(currentFrameRate); // Set the current frame rate
 
+  // The map() function is used to map a value from one range to another and return the mapped value
+  // I use the map() function to map mouseY to the number of yellow lines, dynamically adjusting the number of horizontal and vertical yellow lines based on the mouse's position along the y-axis
+  // The floor() function is used to round a number down to the nearest integer
   // Control the number of horizontal yellow lines based on the value of mouseY
   horizontalYellowLines = floor(map(mouseY, 0, height, 4, 10));
   // Control the number of vertical yellow lines based on the value of mouseY
   verticalYellowLines = floor(map(mouseY, 0, height, 4, 10));
 }
-
-
 
 function drawGrid(){
   //rectangle layout
@@ -377,36 +408,6 @@ function drawLine(){
 
 function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
-  background(255, 250, 240);
-  calculateMondrian(); 
-  draw();
-}
-
-function windowResized(){
-  resizeCanvas(windowWidth, windowHeight);
-  background(255, 250, 240);
-  calculateMondrian(); 
-  draw();
-}
-
-function calculateMondrian(){
-  canvasAspectRatio = width/height;
-  mondrian.aspect = 1; //Square aspect ratio
-
-  if(1 > canvasAspectRatio){
-    mondrian.width = width;
-    mondrian.height = width / mondrian.aspect;
-    mondrian.yOffset = (height - mondrian.height) / 2;
-    mondrian.xOffset = 0;
-  } else if (1 < canvasAspectRatio){
-    mondrian.width = height * mondrian.aspect;
-    mondrian.height = height;
-    mondrian.xOffset = (width - mondrian.width) / 2;
-    mondrian.yOffset = 0;
-  } else if (1 == canvasAspectRatio){
-    mondrian.width = width;
-    mondrian.height = height;
-    mondrian.xOffset = 0;
-    mondrian.yOffset = 0;
-  }
+  // Recalculate Mondrian properties when window is resized
+  mondrian.calculateMondrian()(windowWidth, windowHeight);
 }
